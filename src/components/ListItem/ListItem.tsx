@@ -40,7 +40,7 @@ function ListItem({ guid, name, cpf, email, phone }: listItemProps) {
         queryClient.refetchQueries({ queryKey: ["contact"] });
       })
       .finally(() => setIsLoadingDelete(false));
-    toast.success("Contato Deletedo", {
+    toast.success("Contato Deletado", {
       description: "Contato deletado com sucesso",
     });
   }, [deleteContact, guid]);
