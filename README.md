@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Desafio A5 Solutions
 
-## Getting Started
+A5 deseja um aplicativo simples que controle uma lista de contatos com Nome, CPF, E-mail e
+Telefone. O aplicativo deve iniciar numa tela de listagem de contatos e caso não haja nenhum
+deve aparecer uma mensagem amigável de que não há contatos cadastrados. Deve ser possível
+cadastrar, alterar e excluir contatos.
+As telas devem ser desenvolvidas de forma componentizada para que seja possível reutilizar em
+outros pontos do projeto ou futuramente em outras telas.
+A API de backend deve ser desenvolvida em arquitetura REST.
 
-First, run the development server:
+Condições atendidas:
+1. Ao iniciar na tela de listagem o aplicativo apresenta uma mensagem amigável caso não tenha contatos
+2. Pode cadastrar novo contato, foi adicionado feedback quando adicionado.
+3. Pode excluir o contato com feedback de sucesso.
+4. As telas foram criadas de forma componentizada.
+5. Foi criado uma estrutura de back-end para atender o front-end.
+
+## Apresentação
+<div>
+  <img
+    width="400"
+    src="https://github.com/user-attachments/assets/ec55bfca-8852-4bc6-b970-4dd2b81c033b" 
+    alt="Tela inicial" />
+  <img
+    width="475"
+    src="https://github.com/user-attachments/assets/aba3a1cf-2d51-46a5-b526-13f5c6c8e930" 
+    alt="Tela inicial" />
+</div>
+
+## Pré-requisitos para iniciar o projeto
+- Node.js e npm
+  <div>
+    O React depende do Node.js e do npm para executar scripts de build e gerenciar dependências. O Create React App precisa de pelo menos a versão 10 do Node e o npm precisa de pelo menos a versão 5.2.
+  </div>
+## Rodando a aplicação
+
+Clone esse repositorio
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+  git clone https://github.com/LucsGomes/teste-a5-solutions.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Va para a pasta do projeto
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+  cd teste-a5-solutions
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Instale as dependencias
 
-## Learn More
+```bash
+  npm | npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+Inicie a Aplicação
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+ npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Desafios encontrados
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Detectei um problema em que o CORS estava me impedindo de fazer requisições através do navegador por conta do Preflight ou algo do tipo.
+- Também foi um desafio fazer o delete do contato, pois na documentação constava um exemplo de uso que não se aplicava. Então, por meio de uma análise do cURL, pude ver os parâmetros que precisavam ser usados na query do delete.
+- A implementação do BFF (Back-end for Front-end) também foi um desafio para mim. Como não conseguia fazer as requisições pelo localhost, tive que estudar sobre o CORS para contornar a questão e entregar o projeto.
+- Tive problemas com cache nos headers da requisição, e isso foi uma surpresa, pois estava prestes a entregar o projeto e, quando fui fazer um último teste, nada carregava. O token que estava no cache estava expirado. Fiz o armazenamento do token nos cookies do navegador, mas limpá-los não funcionava por conta do cache. Então, a solução que encontrei foi retirar o cache dos headers.
