@@ -12,8 +12,9 @@ Condições atendidas:
 1. Ao iniciar na tela de listagem o aplicativo apresenta uma mensagem amigável caso não tenha contatos
 2. Pode cadastrar novo contato, foi adicionado feedback quando adicionado.
 3. Pode excluir o contato com feedback de sucesso.
-4. As telas foram criadas de forma componentizada.
-5. Foi criado uma estrutura de back-end para atender o front-end.
+4. Pode editar o contato com o feedback de sucesso.
+5. As telas foram criadas de forma componentizada.
+6. Foi criado uma estrutura de back-end para atender o front-end.
 
 ## Apresentação
 <div>
@@ -63,4 +64,4 @@ Inicie a Aplicação
 - Detectei um problema em que o CORS estava me impedindo de fazer requisições através do navegador por conta do Preflight ou algo do tipo.
 - Também foi um desafio fazer o delete do contato, pois na documentação constava um exemplo de uso que não se aplicava. Então, por meio de uma análise do cURL, pude ver os parâmetros que precisavam ser usados na query do delete.
 - A implementação do BFF (Back-end for Front-end) também foi um desafio para mim. Como não conseguia fazer as requisições pelo localhost, tive que estudar sobre o CORS para contornar a questão e entregar o projeto.
-- Tive problemas com cache nos headers da requisição, e isso foi uma surpresa, pois estava prestes a entregar o projeto e, quando fui fazer um último teste, nada carregava. O token que estava no cache estava expirado. Fiz o armazenamento do token nos cookies do navegador, mas limpá-los não funcionava por conta do cache. Então, a solução que encontrei foi retirar o cache dos headers.
+- Tive problemas com cache do fetch do Next.js, e isso foi uma surpresa, pois estava prestes a entregar o projeto e, quando fui fazer um último teste, nada carregava. O token que estava no cache estava expirado. Fiz o armazenamento do token nos cookies do navegador, mas limpá-los não funcionava por conta do cache. Então, a solução que encontrei foi desligar através do headers o cache do Next.js.
