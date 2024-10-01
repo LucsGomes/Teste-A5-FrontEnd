@@ -23,6 +23,7 @@ export async function GET() {
     {
       method: "GET",
       headers: headersList,
+      cache: "no-store",
     }
   );
 

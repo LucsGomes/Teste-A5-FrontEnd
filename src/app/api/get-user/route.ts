@@ -20,6 +20,7 @@ export async function GET() {
       method: "POST",
       body: bodyContent,
       headers: headersList,
+      cache: "no-store",
     }
   );
 

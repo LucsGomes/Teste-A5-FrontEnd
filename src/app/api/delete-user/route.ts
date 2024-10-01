@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
       method: "POST",
       body: bodyContent,
       headers: headersList,
+      cache: "no-store",
     }
   );
 
