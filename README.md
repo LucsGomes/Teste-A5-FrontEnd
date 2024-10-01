@@ -28,6 +28,14 @@ Condições atendidas:
     alt="Tela inicial" />
 </div>
 
+## Oque foi usado
+
+- React
+- Typescript
+- Next.js
+- Shadcn/UI
+- axios
+
 ## Pré-requisitos para iniciar o projeto
 - Node.js e npm
   <div>
