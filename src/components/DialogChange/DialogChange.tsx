@@ -16,71 +16,71 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { contactRepository } from "@/repositorys/contact/contactRepository";
 import { queryClient } from "@/services/tanstackQuery/queryClient";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "sonner";
+import { UserPen } from "lucide-react";
+import { UserContext } from "../ListItem/ListItem";
 
-const { createContact } = contactRepository;
+const { changeContact } = contactRepository;
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   cpf: z.string().min(2).max(11),
   email: z.string().min(2).email(),
-  phone: z.string().min(2).max(50),
+  phone: z.string().min(2).max(11),
 });
 
-function DialogAdd() {
+function DialogChange() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoadingCreate, setIsLoadingCreate] = useState(false);
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [guid, name, cpf, email, phone] = useContext(UserContext);
 
   const handleChangeModal = (newValue: boolean) => setIsOpen(newValue);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      cpf: "",
-      email: "",
-      phone: "",
+      name: name,
+      cpf: cpf,
+      email: email,
+      phone: phone,
     },
   });
-
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoadingCreate(true);
-    const newContact = {
+    setIsLoadingUpdate(true);
+    const editContact = {
+      guid: guid,
       name: values.name,
       cpf: values.cpf,
       email: values.email,
       phone: values.phone,
     };
 
-    await createContact(newContact)
+    await changeContact(editContact)
       .then(() => {
         queryClient.refetchQueries({ queryKey: ["contact"] });
         form.reset();
         handleChangeModal(false);
-        toast.success("Contato adicionado", {
-          description: "Novo contato adicionado com sucesso",
+        toast.success("Contato Alterado", {
+          description: "Contato alterado com sucesso",
         });
       })
-      .finally(() => setIsLoadingCreate(false));
+      .finally(() => setIsLoadingUpdate(false));
   }
-
   return (
     <Dialog open={isOpen} onOpenChange={handleChangeModal}>
       <DialogTrigger asChild>
-        <Button className="bg-green-400 text-white hover:bg-white hover:text-green-500">
-          Adicionar
-        </Button>
+        <UserPen />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Adicionar contato</DialogTitle>
+          <DialogTitle>Alterar Contato</DialogTitle>
           <DialogDescription>
-            Adicione um novo contato para sua lista.
+            Altere informações do seu contato.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form className="space-y-2" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="name"
@@ -107,7 +107,7 @@ function DialogAdd() {
                   <FormControl>
                     <Input
                       id="cpf"
-                      defaultValue=""
+                      defaultValue={cpf}
                       className="col-span-3"
                       {...field}
                     />
@@ -124,7 +124,7 @@ function DialogAdd() {
                   <FormControl>
                     <Input
                       id="email"
-                      defaultValue=""
+                      defaultValue={email}
                       className="col-span-3"
                       {...field}
                     />
@@ -141,7 +141,7 @@ function DialogAdd() {
                   <FormControl>
                     <Input
                       id="phone"
-                      defaultValue=""
+                      defaultValue={phone}
                       className="col-span-3"
                       {...field}
                     />
@@ -153,7 +153,7 @@ function DialogAdd() {
               <Button
                 type="submit"
                 className="bg-green-400 text-white hover:bg-white hover:text-green-500"
-                disabled={isLoadingCreate}
+                disabled={isLoadingUpdate}
               >
                 Salvar
               </Button>
@@ -165,4 +165,4 @@ function DialogAdd() {
   );
 }
 
-export { DialogAdd };
+export { DialogChange };

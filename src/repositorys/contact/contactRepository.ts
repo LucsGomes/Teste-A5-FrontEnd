@@ -9,6 +9,14 @@ type CreateNewContactProps = {
   phone: string;
 };
 
+type ChangeContactProps = {
+  guid: string;
+  name: string;
+  cpf: string;
+  email: string;
+  phone: string;
+};
+
 interface Contact {
   error?: string;
   guid: string;
@@ -23,6 +31,7 @@ interface IContactsModel {
   getList: () => Promise<ReturnGetList>;
   createContact: (newContact: CreateNewContactProps) => Promise<string>;
   deleteContact: (guid: string) => Promise<string>;
+  changeContact: (editContact: ChangeContactProps) => Promise<string>;
 }
 
 const contactRepository: IContactsModel = {
@@ -41,6 +50,13 @@ const contactRepository: IContactsModel = {
     const { data } = await commonInstance.post<string>("/delete-user", {
       guid: guid,
     });
+    return data;
+  },
+  changeContact: async (editContact: ChangeContactProps) => {
+    const { data } = await commonInstance.patch<string>(
+      "/patch-user",
+      editContact
+    );
     return data;
   },
 };

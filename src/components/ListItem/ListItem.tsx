@@ -1,8 +1,8 @@
 "use client";
-import { Trash2, UserPen } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { TableCell } from "../ui/table";
 import { contactRepository } from "@/repositorys/contact/contactRepository";
-import { useCallback } from "react";
+import { createContext, useCallback, useState } from "react";
 import { queryClient } from "@/services/tanstackQuery/queryClient";
 import {
   AlertDialog,
@@ -16,6 +16,10 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { toast } from "sonner";
+import { DialogChange } from "../DialogChange/DialogChange";
+import { insertMaskInPhone } from "@/functions/insertMaskInPhone/insertMaskInPhone";
+import { insertMaskInCpf } from "@/functions/insertMaskInCpf/insertMaskInCpf";
+export const UserContext = createContext<string[]>([]);
 
 interface listItemProps {
   guid: string;
@@ -27,17 +31,17 @@ interface listItemProps {
 }
 
 function ListItem({ guid, name, cpf, email, phone }: listItemProps) {
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const { deleteContact } = contactRepository;
   const handleDelete = useCallback(async () => {
-    await deleteContact(guid).then(() => {
-      queryClient.refetchQueries({ queryKey: ["contact"] });
-    });
+    setIsLoadingDelete(true);
+    await deleteContact(guid)
+      .then(() => {
+        queryClient.refetchQueries({ queryKey: ["contact"] });
+      })
+      .finally(() => setIsLoadingDelete(false));
     toast.success("Contato Deletedo", {
       description: "Contato deletado com sucesso",
-      action: {
-        label: "Fechar",
-        onClick: () => "",
-      },
     });
   }, [deleteContact, guid]);
 
@@ -45,13 +49,13 @@ function ListItem({ guid, name, cpf, email, phone }: listItemProps) {
     <>
       <TableCell></TableCell>
       <TableCell>{name}</TableCell>
-      <TableCell>{cpf}</TableCell>
+      <TableCell>{insertMaskInCpf(cpf)}</TableCell>
       <TableCell>{email}</TableCell>
-      <TableCell>{phone}</TableCell>
+      <TableCell>{insertMaskInPhone(phone)}</TableCell>
       <TableCell>
-        <button onClick={() => console.log("edit")}>
-          <UserPen />
-        </button>
+        <UserContext.Provider value={[guid, name, cpf, email, phone]}>
+          <DialogChange />
+        </UserContext.Provider>
       </TableCell>
       <TableCell>
         <AlertDialog>
@@ -71,6 +75,7 @@ function ListItem({ guid, name, cpf, email, phone }: listItemProps) {
               <AlertDialogAction
                 onClick={handleDelete}
                 className="bg-red-500 hover:text-red-500 hover:bg-slate-400"
+                disabled={isLoadingDelete}
               >
                 Excluir
               </AlertDialogAction>
